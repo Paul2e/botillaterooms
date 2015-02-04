@@ -46,7 +46,7 @@ describe('playing botillaterooms poker game', function() {
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('BET:10', done);
+      .expect('BET:15', done);
     });
   });
 
@@ -110,7 +110,7 @@ describe('playing botillaterooms poker game', function() {
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('BET', done);
+      .expect('BET:5', done);
     });
   });
 
@@ -265,4 +265,91 @@ describe('playing botillaterooms poker game', function() {
       });
     });
   });
+
+  it('should bet if other bot calls but we have good hand', function(done) {
+    var botillaterooms = request(app);
+
+    botillaterooms.post('/update')
+    .type('application/x-www-form-urlencoded')
+    .send({
+      'COMMAND': 'CARD',
+      'DATA': 'T'
+    })
+    .end(function() {
+      botillaterooms.post('/update')
+      .type('application/x-www-form-urlencoded')
+      .send({
+        'COMMAND': 'OPPONENT_MOVE',
+        'DATA': 'CALL'
+      })
+      .end(function() {
+        botillaterooms.get('/move')
+        .expect(200)
+        .expect('BET', done);
+      });
+    });
+  });
+});
+
+describe('playing botillaterooms with different bets (i.e. no money)', function() {
+
+  beforeEach('set up a new game of botillaterooms', function(done) {
+    request(app)
+    .post('/start')
+    .type('application/x-www-form-urlencoded')
+    .send({
+      'OPPONENT_NAME': 'IAMTHETESTER',
+      'STARTING_CHIP_COUNT': '3',
+      'HAND_LIMIT': '300'
+    })
+    .expect(200, done);
+  });
+
+  it('should bet all on J', function(done) {
+    var botillaterooms = request(app);
+
+    botillaterooms.post('/update')
+    .type('application/x-www-form-urlencoded')
+    .send({
+      'COMMAND': 'CARD',
+      'DATA': 'J'
+    })
+    .end(function() {
+      botillaterooms.get('/move')
+      .expect(200)
+      .expect('BET:3', done);
+    });
+  });
+
+  it('should bet all on Q', function(done) {
+    var botillaterooms = request(app);
+
+    botillaterooms.post('/update')
+    .type('application/x-www-form-urlencoded')
+    .send({
+      'COMMAND': 'CARD',
+      'DATA': 'Q'
+    })
+    .end(function() {
+      botillaterooms.get('/move')
+      .expect(200)
+      .expect('BET:3', done);
+    });
+  });
+
+	it('should bet all on K', function(done) {
+		var botillaterooms = request(app);
+
+		botillaterooms.post('/update')
+		.type('application/x-www-form-urlencoded')
+		.send({
+			'COMMAND': 'CARD',
+			'DATA': 'K'
+		})
+		.end(function() {
+			botillaterooms.get('/move')
+			.expect(200)
+			.expect('BET:3', done);
+		});
+	});
 });

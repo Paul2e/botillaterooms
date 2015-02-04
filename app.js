@@ -29,9 +29,9 @@ var cardDictionary = {
   "8": "CALL",
   "9": "CALL",
   "T": "BET",
-  "J": "BET",
-  "Q": "BET:{amount}",
-  "K": "BET:{amount}",
+  "J": "BET:Small",
+  "Q": "BET:Mid",
+  "K": "BET:Large",
   "A": "ALL-IN"
 };
 
@@ -101,16 +101,22 @@ app.post('/update', function(req, res) {
 
 app.get('/move', function(req, res) {
 
-  if (opponentMove === "CALL") {
+  var move = cardDictionary[myCard];
+  var goodHand = /BET/.test(move);
 
+  if (opponentMove === "CALL" && !goodHand) {
     return res.send("CALL");
   }
 
-  var move = cardDictionary[myCard];
-
   switch (true) {
-    case /{amount}/.test(move):
-      res.send("BET:10");
+    case /Small/.test(move):
+      res.send("BET:" + smallBet());
+      break;
+    case /Mid/.test(move):
+      res.send("BET:" + mediumBet());
+      break;
+    case /Large/.test(move):
+      res.send("BET:" + highBet());
       break;
     case /ALL-IN/.test(move):
       res.send("BET:" + startingChipCount);
@@ -120,6 +126,33 @@ app.get('/move', function(req, res) {
       break;
   }
 });
+
+function smallBet() {
+  var bet = startingChipCount;
+  if (startingChipCount > 5) {
+    bet = 5;
+  }
+
+  return bet;
+}
+
+function mediumBet() {
+  var bet = startingChipCount;
+  if (startingChipCount > 10) {
+    bet = 10;
+  }
+
+  return bet;
+}
+
+function highBet() {
+  var bet = startingChipCount;
+  if (startingChipCount > 15) {
+    bet = 15;
+  }
+
+  return bet;
+}
 
 var server = app.listen(3000, function() {
 
