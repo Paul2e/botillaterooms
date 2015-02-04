@@ -16,9 +16,10 @@ var hand;
 var hands = [];
 var opponents = [];
 var currentOpponent;
+var ourMove;
 var opponentMove;
 var opponentCard;
-var button;
+var lastMove;
 var cardDictionary = {
   "2": "FOLD",
   "3": "FOLD",
@@ -74,8 +75,10 @@ app.post('/update', function(req, res) {
 
     if (opponentName) {
       var opponentHand = {
-        "card": opponentCard,
-        "move": opponentMove
+        "ourCard": myCard,
+        "opponentCard": opponentCard,
+				"ourMove": ourMove,
+        "opponentMove": opponentMove
       };
 
       hands.push(opponentHand);
@@ -85,7 +88,7 @@ app.post('/update', function(req, res) {
   }
 
   if (req.body.COMMAND === "RECEIVE_BUTTON") {
-    button = true;
+    // button = true;
   }
 
   if (req.body.COMMAND === "POST_BLIND") {
@@ -105,26 +108,35 @@ app.get('/move', function(req, res) {
   var goodHand = /BET/.test(move);
 
   if (opponentMove === "CALL" && !goodHand) {
-    return res.send("CALL");
+    move = "CALL";
+    // return res.send("CALL");
+  } else {
+    switch (true) {
+      case /Small/.test(move):
+        // res.send("BET:" + smallBet());
+        move = "BET:" + smallBet();
+        break;
+      case /Mid/.test(move):
+        // res.send("BET:" + mediumBet());
+        move = "BET:" + mediumBet();
+        break;
+      case /Large/.test(move):
+        // res.send("BET:" + highBet());
+        move = "BET:" + highBet();
+        break;
+      case /ALL-IN/.test(move):
+        // res.send("BET:" + startingChipCount);
+        move = "BET:" + startingChipCount;
+        break;
+      default:
+
+        // res.send(move);
+        break;
+    }
   }
 
-  switch (true) {
-    case /Small/.test(move):
-      res.send("BET:" + smallBet());
-      break;
-    case /Mid/.test(move):
-      res.send("BET:" + mediumBet());
-      break;
-    case /Large/.test(move):
-      res.send("BET:" + highBet());
-      break;
-    case /ALL-IN/.test(move):
-      res.send("BET:" + startingChipCount);
-      break;
-    default:
-      res.send(move);
-      break;
-  }
+  ourMove = move;
+  res.send(move);
 });
 
 function smallBet() {

@@ -337,19 +337,19 @@ describe('playing botillaterooms with different bets (i.e. no money)', function(
     });
   });
 
-	it('should bet all on K', function(done) {
-		var botillaterooms = request(app);
+  it('should bet all on K', function(done) {
+    var botillaterooms = request(app);
 
-		botillaterooms.post('/update')
-		.type('application/x-www-form-urlencoded')
-		.send({
-			'COMMAND': 'CARD',
-			'DATA': 'K'
-		})
-		.end(function() {
-			botillaterooms.get('/move')
-			.expect(200)
-			.expect('BET:3', done);
-		});
-	});
+    botillaterooms.post('/update')
+    .type('application/x-www-form-urlencoded')
+    .send({
+      'COMMAND': 'CARD',
+      'DATA': 'K'
+    })
+    .end(function() {
+      botillaterooms.get('/move')
+      .expect(200)
+      .expect('BET:3', done);
+    });
+  });
 });
