@@ -36,21 +36,11 @@ var cardDictionary = {
   "A": "ALL-IN"
 };
 
-
 app.use(bodyParser.urlencoded({
   extended: false
 }));
+
 app.post('/start', function(req, res) {
-
-  if (opponentName) {
-    var opponent = {
-      "name": opponentName,
-      "hands": hands
-    };
-    opponents.push(opponent);
-
-    logger.info("Last opponent status: ", opponent);
-  }
 
   opponentName = req.body.OPPONENT_NAME;
   startingChipCount = parseInt(req.body.STARTING_CHIP_COUNT);
@@ -61,6 +51,8 @@ app.post('/start', function(req, res) {
 });
 
 app.post('/update', function(req, res) {
+
+  // logger.info(req.body.COMMAND);
 
   if (req.body.COMMAND === "CARD") {
     myCard = req.body.DATA;
@@ -77,7 +69,7 @@ app.post('/update', function(req, res) {
       var opponentHand = {
         "ourCard": myCard,
         "opponentCard": opponentCard,
-				"ourMove": ourMove,
+        "ourMove": ourMove,
         "opponentMove": opponentMove
       };
 
@@ -99,6 +91,16 @@ app.post('/update', function(req, res) {
     startingChipCount += parseInt(req.body.DATA);
   }
 
+  if (req.body.COMMAND === "GAME_OVER") {
+    var opponent = {
+      "name": opponentName,
+      "hands": hands
+    };
+    opponents.push(opponent);
+
+    logger.info("Last opponent status: ", opponent);
+  }
+
   res.sendStatus(200);
 });
 
@@ -109,28 +111,21 @@ app.get('/move', function(req, res) {
 
   if (opponentMove === "CALL" && !goodHand) {
     move = "CALL";
-    // return res.send("CALL");
   } else {
     switch (true) {
       case /Small/.test(move):
-        // res.send("BET:" + smallBet());
         move = "BET:" + smallBet();
         break;
       case /Mid/.test(move):
-        // res.send("BET:" + mediumBet());
         move = "BET:" + mediumBet();
         break;
       case /Large/.test(move):
-        // res.send("BET:" + highBet());
         move = "BET:" + highBet();
         break;
       case /ALL-IN/.test(move):
-        // res.send("BET:" + startingChipCount);
         move = "BET:" + startingChipCount;
         break;
       default:
-
-        // res.send(move);
         break;
     }
   }
