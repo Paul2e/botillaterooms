@@ -37,20 +37,22 @@ app.post('/start', function(req, res) {
 
 app.post('/update', function(req, res) {
   var opponentMove;
+  var opponentCard;
 
   if (req.body.COMMAND === "CARD") {
     myCard = req.body.DATA;
+  	console.log("Our card: " + myCard);
   }
 
   if (req.body.COMMAND === "OPPONENT_MOVE") {
     opponentMove = req.body.DATA;
+	console.log("OpponentMove: " + opponentMove);
   }
 
-  console.log("Our card: " + myCard);
-  console.log("OpponentMove: " + opponentMove);
 
   if (req.body.COMMAND === "OPPONENT_CARD") {
-    console.log("Opponent card: " + req.body.DATA);
+  	opponentCard = req.body.DATA;
+    console.log("Opponent card: " + opponentCard);
   }
 
   if (req.body.COMMAND === "RECEIVE_BUTTON") {
