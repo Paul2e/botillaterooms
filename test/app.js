@@ -2,7 +2,6 @@ var request = require('supertest');
 var express = require('express');
 var app = require('../app.js').app;
 var assert = require('assert');
-var expect = require('Chai').expect;
 
 
 describe('start botilaterooms poker game', function() {
