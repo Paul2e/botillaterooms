@@ -7,12 +7,16 @@ var startingChipCount;
 var handLimit;
 var shouldBet;
 var shouldBetAllIn;
+var shouldFold;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.post('/start', function (req, res) {
 
+	shouldBet = false;
+	shouldBetAllIn = false;
+	shouldFold = false;
 	opponentName = req.body.OPPONENT_NAME;
-	startingChipCount = req.body.STARTING_CHIP_COUNT;
+	startingChipCount = parseInt(req.body.STARTING_CHIP_COUNT);
 	handLimit = req.body.HAND_LIMIT;
 
 	console.log('New Opponent ' + opponentName  +' starting with ' + startingChipCount + ' chips for ' + handLimit + ' hands');
@@ -23,11 +27,14 @@ app.post('/start', function (req, res) {
 
 app.post('/update', function(req, res) {
 
+
 	if (req.body.COMMAND === "CARD") {
 		var card = req.body.DATA
 
 		if (card === "9" || card === "T" || card === "J" || card === "Q") {
 			shouldBet = true
+		} else if (card === "2" || card === "3" || card === "4") {
+			shouldFold = true
 		} else if (card === "K" || card === "A") {
 			shouldBetAllIn = true
 		}
@@ -36,10 +43,12 @@ app.post('/update', function(req, res) {
 	}
 
 	if (req.body.COMMAND === "OPPONENT_CARD") {
-		console.log("Oponent card: " + req.body.DATA)
+
+		console.log("Opponent card: " + req.body.DATA)
 	}
 
 	if (req.body.COMMAND === "RECEIVE_BUTTON") {
+
 		console.log("We have button")
 	}
 
@@ -50,7 +59,7 @@ app.post('/update', function(req, res) {
 
 	if (req.body.COMMAND === "RECEIVE_CHIPS") {
 		startingChipCount += parseInt(req.body.DATA)
-		console.log("Reveived chips: " + req.body.DATA + " New count:" + startingChipCount)
+		console.log("Received chips: " + req.body.DATA + " New count:" + startingChipCount)
 	}
 
 	res.sendStatus(200);
@@ -59,13 +68,25 @@ app.post('/update', function(req, res) {
 app.get('/move', function(req, res) {
 
 	if (shouldBet) {
+
 		console.log("Betting");
 		res.send("BET");
+
 	} else if (shouldBetAllIn) {
-		res.send("BET:" + startingChipCount)
-	} else {
-		console.log("Folding");
+
+		console.log("Sending: BET ALL IN:" + startingChipCount);
+		res.send("BET:" + startingChipCount);
+
+	} else if (shouldFold) {
+
+		console.log("Sending: Folding");
 		res.send("FOLD");
+	}
+	else {
+
+		console.log("Sending: Calling");
+		res.send("CALL");
+
 	}
 	
 })

@@ -155,5 +155,139 @@ describe('playing botillaterooms poker game', function() {
 					done();
 				});
 			})
-	});	
+	});
+
+	it('should fold on 2', function(done) {
+		var botillaterooms = request(app);
+			
+			botillaterooms.post('/update')
+			.type('application/x-www-form-urlencoded')
+			.send({
+				'COMMAND':'CARD',
+				'DATA':'2'
+			})
+			.end(function() {
+				botillaterooms.get('/move')
+				.expect(200)
+				.expect('FOLD')
+				.end(function(err, res) {
+					done();
+				});
+			})
+	});
+
+	it('should fold on 3', function(done) {
+		var botillaterooms = request(app);
+			
+			botillaterooms.post('/update')
+			.type('application/x-www-form-urlencoded')
+			.send({
+				'COMMAND':'CARD',
+				'DATA':'3'
+			})
+			.end(function() {
+				botillaterooms.get('/move')
+				.expect(200)
+				.expect('FOLD')
+				.end(function(err, res) {
+					done();
+				});
+			})
+	});
+
+	it('should fold on 4', function(done) {
+		var botillaterooms = request(app);
+			
+			botillaterooms.post('/update')
+			.type('application/x-www-form-urlencoded')
+			.send({
+				'COMMAND':'CARD',
+				'DATA':'4'
+			})
+			.end(function() {
+				botillaterooms.get('/move')
+				.expect(200)
+				.expect('FOLD')
+				.end(function(err, res) {
+					done();
+				});
+			})
+	});
+
+	it('should call on 5', function(done) {
+		var botillaterooms = request(app);
+			
+			botillaterooms.post('/update')
+			.type('application/x-www-form-urlencoded')
+			.send({
+				'COMMAND':'CARD',
+				'DATA':'5'
+			})
+			.end(function() {
+				botillaterooms.get('/move')
+				.expect(200)
+				.expect('CALL')
+				.end(function(err, res) {
+					done();
+				});
+			})
+	});
+
+	it('should call on 6', function(done) {
+		var botillaterooms = request(app);
+			
+			botillaterooms.post('/update')
+			.type('application/x-www-form-urlencoded')
+			.send({
+				'COMMAND':'CARD',
+				'DATA':'6'
+			})
+			.end(function() {
+				botillaterooms.get('/move')
+				.expect(200)
+				.expect('CALL')
+				.end(function(err, res) {
+					done();
+				});
+			})
+	});
+
+	it('should call on 7', function(done) {
+		var botillaterooms = request(app);
+			
+			botillaterooms.post('/update')
+			.type('application/x-www-form-urlencoded')
+			.send({
+				'COMMAND':'CARD',
+				'DATA':'7'
+			})
+			.end(function() {
+				botillaterooms.get('/move')
+				.expect(200)
+				.expect('CALL')
+				.end(function(err, res) {
+					done();
+				});
+			})
+	});
+
+	it('should call on 8', function(done) {
+		var botillaterooms = request(app);
+			
+			botillaterooms.post('/update')
+			.type('application/x-www-form-urlencoded')
+			.send({
+				'COMMAND':'CARD',
+				'DATA':'8'
+			})
+			.end(function() {
+				botillaterooms.get('/move')
+				.expect(200)
+				.expect('CALL')
+				.end(function(err, res) {
+					done();
+				});
+			})
+	});
+
 });
