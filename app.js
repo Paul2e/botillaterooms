@@ -6,21 +6,25 @@ var opponentName;
 var myCard;
 var startingChipCount;
 var handLimit;
+var hand;
 
 var opponentMove;
 var opponentCard;
+var button;
 var cardDictionary = {
   "2": "FOLD",
   "3": "FOLD",
   "4": "FOLD",
-  "5": "CALL",
-  "6": "CALL",
+  "5": "FOLD",
+  "6": "FOLD",
   "7": "CALL",
   "8": "CALL",
-  "9": "BET",
+  "9": "CALL",
   "T": "BET",
   "J": "BET",
-  "Q": "BET"
+  "Q": "BET:{amount}",
+  "K": "BET:{amount}",
+  "A": "ALL-IN"
 };
 
 
@@ -32,8 +36,9 @@ app.post('/start', function(req, res) {
   opponentName = req.body.OPPONENT_NAME;
   startingChipCount = parseInt(req.body.STARTING_CHIP_COUNT);
   handLimit = req.body.HAND_LIMIT;
+  hand = 1;
 
-  console.log('New Opponent ' + opponentName + ' starting with ' + startingChipCount + ' chips for ' + handLimit + ' hands');
+  console.log('\n\n\n\nNew Opponent ' + opponentName + ' starting with ' + startingChipCount + ' chips for ' + handLimit + ' hands.\n\n');
 
   res.sendStatus(200);
 });
@@ -42,6 +47,7 @@ app.post('/update', function(req, res) {
 
   if (req.body.COMMAND === "CARD") {
     myCard = req.body.DATA;
+    console.log("\n\nHand: " + hand);
   	console.log("Our card: " + myCard);
   }
 
@@ -54,10 +60,11 @@ app.post('/update', function(req, res) {
   if (req.body.COMMAND === "OPPONENT_CARD") {
   	opponentCard = req.body.DATA;
     console.log("Opponent card: " + opponentCard);
+    hand ++;
   }
 
   if (req.body.COMMAND === "RECEIVE_BUTTON") {
-
+  	button = true;
     console.log("We have button");
   }
 
@@ -76,18 +83,23 @@ app.post('/update', function(req, res) {
 
 app.get('/move', function(req, res) {
 
-  if (opponentMove <= "CALL") {
+  if (opponentMove === "CALL") {
 
-    console.log("Running Low. Calling");
     return res.send("CALL");
   }
 
   var move = cardDictionary[myCard];
 
-  if (move) {
-    res.send(move);
-  } else {
-    res.send("BET:" + startingChipCount);
+  switch (true) {
+  	case /{amount}/.test(move):
+  		res.send("BET:10");
+  		break;
+  	case /ALL-IN/.test(move):
+  		res.send("BET:" + startingChipCount);
+  		break;
+  	default:
+  		res.send(move);
+  		break;
   }
 
 });
