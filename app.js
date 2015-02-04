@@ -25,7 +25,7 @@ var cardDictionary = {
   "3": "FOLD",
   "4": "FOLD",
   "5": "FOLD",
-  "6": "FOLD",
+  "6": "CALL",
   "7": "CALL",
   "8": "CALL",
   "9": "CALL",
@@ -140,15 +140,15 @@ app.get('/move', function(req, res) {
 });
 
 function smallBet() {
-  return Math.round(startingChipCount * 0.6);
+  return Math.round(startingChipCount * 0.5);
 }
 
 function mediumBet() {
-  return Math.round(startingChipCount * 0.7);
+  return Math.round(startingChipCount * 0.6);
 }
 
 function highBet() {
-  return Math.round(startingChipCount * 0.8);
+  return Math.round(startingChipCount * 0.7);
 }
 
 var server = app.listen(3000, function() {
