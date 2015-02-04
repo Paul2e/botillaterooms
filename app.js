@@ -140,15 +140,15 @@ app.get('/move', function(req, res) {
 });
 
 function smallBet() {
-  return Math.round(startingChipCount * 0.4);
+  return Math.round(startingChipCount * 0.6);
 }
 
 function mediumBet() {
-  return Math.round(startingChipCount * 0.5);
+  return Math.round(startingChipCount * 0.7);
 }
 
 function highBet() {
-  return Math.round(startingChipCount * 0.6);
+  return Math.round(startingChipCount * 0.8);
 }
 
 var server = app.listen(3000, function() {
