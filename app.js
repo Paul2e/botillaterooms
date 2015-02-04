@@ -107,7 +107,6 @@ app.post('/update', function(req, res) {
 });
 
 app.get('/move', function(req, res) {
-
   if (opponentName === "roger-bot") {
     return res.send("BET:" + startingChipCount);
   }
@@ -146,15 +145,15 @@ app.get('/move', function(req, res) {
 });
 
 function smallBet() {
-  return Math.round(startingChipCount * 0.5);
+  return Math.round(startingChipCount * 0.2);
 }
 
 function mediumBet() {
-  return Math.round(startingChipCount * 0.6);
+  return Math.round(startingChipCount * 0.3);
 }
 
 function highBet() {
-  return Math.round(startingChipCount * 0.7);
+  return Math.round(startingChipCount * 0.5);
 }
 
 var server = app.listen(3000, function() {
