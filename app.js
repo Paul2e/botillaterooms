@@ -27,20 +27,27 @@ app.post('/start', function (req, res) {
 
 app.post('/update', function(req, res) {
 
+	var card;
+	var opponentMove;
 
 	if (req.body.COMMAND === "CARD") {
-		var card = req.body.DATA
-
-		if (card === "9" || card === "T" || card === "J" || card === "Q") {
-			shouldBet = true
-		} else if (card === "2" || card === "3" || card === "4") {
-			shouldFold = true
-		} else if (card === "K" || card === "A") {
-			shouldBetAllIn = true
-		}
-
-		console.log("Our card: " + card)
+		card = req.body.DATA;
 	}
+
+	if (req.body.COMMAND === "OPPONENT_MOVE") {
+		opponentMove = req.body.DATA;
+	}
+
+	if (card === "9" || card === "T" || card === "J" || card === "Q") {
+		shouldBet = true
+	} else if (card === "2" || card === "3" || card === "4") {
+		shouldFold = true
+	} else if (card === "K" || card === "A") {
+		shouldBetAllIn = true
+	}
+
+	console.log("Our card: " + card);
+	console.log("OpponentMove: " + opponentMove);
 
 	if (req.body.COMMAND === "OPPONENT_CARD") {
 
@@ -67,7 +74,12 @@ app.post('/update', function(req, res) {
 
 app.get('/move', function(req, res) {
 
-	if (shouldBet) {
+	 if (startingChipCount <= 5) {
+
+	 	console.log("Running Low. Calling");
+	 	res.send("CALL");
+
+	 } else if (shouldBet) {
 
 		console.log("Betting");
 		res.send("BET");
