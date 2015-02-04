@@ -12,6 +12,7 @@ var myCard;
 var startingChipCount;
 var handLimit;
 var hand;
+var button;
 
 var hands = [];
 var opponents = [];
@@ -52,8 +53,6 @@ app.post('/start', function(req, res) {
 
 app.post('/update', function(req, res) {
 
-  // logger.info(req.body.COMMAND);
-
   if (req.body.COMMAND === "CARD") {
     myCard = req.body.DATA;
   }
@@ -80,7 +79,7 @@ app.post('/update', function(req, res) {
   }
 
   if (req.body.COMMAND === "RECEIVE_BUTTON") {
-    // button = true;
+    button = true;
   }
 
   if (req.body.COMMAND === "POST_BLIND") {
@@ -101,6 +100,7 @@ app.post('/update', function(req, res) {
     logger.info("Last opponent status: ", opponent);
     opponentMove = null;
     opponentCard = null;
+    button = false;
   }
 
   res.sendStatus(200);
@@ -112,10 +112,12 @@ app.get('/move', function(req, res) {
   var goodHand = /BET/.test(move) || /ALL-IN/.test(move);
   var opponentHasGoodMove = /BET/.test(opponentMove);
 
-  if (opponentMove === "CALL" && !goodHand) {
-    move = "CALL";
-  } else if (opponentHasGoodMove && !goodHand) {
-    move = "FOLD";
+  if (!goodHand) {
+    if (opponentMove === "CALL" || button) {
+      move = "CALL";
+    } else if (opponentHasGoodMove) {
+      move = "FOLD";
+    }
   } else {
     switch (true) {
       case /Small/.test(move):

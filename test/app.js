@@ -377,3 +377,40 @@ describe('playing botillaterooms with different bets (i.e. no money)', function(
     });
   });
 });
+
+describe('playing botillaterooms and got a button', function() {
+
+  beforeEach('set up a new game of botillaterooms', function(done) {
+    request(app)
+    .post('/start')
+    .type('application/x-www-form-urlencoded')
+    .send({
+      'OPPONENT_NAME': 'IAMTHETESTER',
+      'STARTING_CHIP_COUNT': '3',
+      'HAND_LIMIT': '300'
+    })
+    .expect(200, done);
+  });
+
+  it('should bet all on J', function(done) {
+    var botillaterooms = request(app);
+
+    botillaterooms.post('/update')
+    .type('application/x-www-form-urlencoded')
+    .send({
+      'COMMAND': 'CARD',
+      'DATA': '5'
+    })
+    .end(function() {
+      botillaterooms.post('/update')
+      .type('application/x-www-form-urlencoded')
+      .send({
+        'COMMAND': 'RECEIVE_BUTTON'
+      }).end(function() {
+        botillaterooms.get('/move')
+        .expect(200)
+        .expect('CALL', done);
+      });
+    });
+  });
+});
