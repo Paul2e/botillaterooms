@@ -34,7 +34,7 @@ describe('playing botillaterooms poker game', function() {
     .expect(200, done);
   });
 
-  it('should bet 10 on K', function(done) {
+  it('should bet 60 on K', function(done) {
     var botillaterooms = request(app);
 
     botillaterooms.post('/update')
@@ -46,7 +46,7 @@ describe('playing botillaterooms poker game', function() {
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('BET:15', done);
+      .expect('BET:60', done);
     });
   });
 
@@ -110,7 +110,7 @@ describe('playing botillaterooms poker game', function() {
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('BET:5', done);
+      .expect('BET:40', done);
     });
   });
 
@@ -126,7 +126,7 @@ describe('playing botillaterooms poker game', function() {
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('BET:10', done);
+      .expect('BET:50', done);
     });
   });
 
@@ -341,7 +341,7 @@ describe('playing botillaterooms with different bets (i.e. no money)', function(
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('BET:3', done);
+      .expect('BET:1', done);
     });
   });
 
@@ -357,7 +357,7 @@ describe('playing botillaterooms with different bets (i.e. no money)', function(
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('BET:3', done);
+      .expect('BET:2', done);
     });
   });
 
@@ -373,7 +373,7 @@ describe('playing botillaterooms with different bets (i.e. no money)', function(
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('BET:3', done);
+      .expect('BET:2', done);
     });
   });
 });
