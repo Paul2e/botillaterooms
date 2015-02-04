@@ -1,6 +1,11 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var log4js = require('log4js');
+log4js.loadAppender('file');
+log4js.addAppender(log4js.appenders.file('logs/opponents.log'), 'opponents');
+var logger = log4js.getLogger('opponents');
+logger.setLevel('INFO');
 
 var opponentName;
 var myCard;
@@ -44,7 +49,8 @@ app.post('/start', function(req, res) {
 
     opponents.push(opponent);
 
-    console.log('Last opponent stats: ', opponent);
+    logger.info("Last opponent status: ", opponent);
+    // console.log('Last opponent stats: ', opponent);
   }
   opponentName = req.body.OPPONENT_NAME;
   startingChipCount = parseInt(req.body.STARTING_CHIP_COUNT);
