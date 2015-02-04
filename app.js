@@ -109,7 +109,7 @@ app.post('/update', function(req, res) {
 app.get('/move', function(req, res) {
 
   if (opponentName === "roger-bot") {
-    return "BET:" + startingChipCount;
+    return res.send("BET:" + startingChipCount);
   }
 
   var move = cardDictionary[myCard];
