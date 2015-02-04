@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 var opponentName;
 var startingChipCount;
 var handLimit;
+var shouldBet;
+var shouldBetAllIn;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.post('/start', function (req, res) {
@@ -21,15 +23,51 @@ app.post('/start', function (req, res) {
 
 app.post('/update', function(req, res) {
 
-	console.log(req.body.COMMAND);
-	//console.log(req.body.DATA);
+	if (req.body.COMMAND === "CARD") {
+		var card = req.body.DATA
+
+		if (card === "9" || card === "T" || card === "J" || card === "Q") {
+			shouldBet = true
+		} else if (card === "K" || card === "A") {
+			shouldBetAllIn = true
+		}
+
+		console.log("Our card: " + card)
+	}
+
+	if (req.body.COMMAND === "OPPONENT_CARD") {
+		console.log("Oponent card: " + req.body.DATA)
+	}
+
+	if (req.body.COMMAND === "RECEIVE_BUTTON") {
+		console.log("We have button")
+	}
+
+	if (req.body.COMMAND === "POST_BLIND") {
+		startingChipCount -= 1
+		console.log("POST BLIND Chip count: " + startingChipCount)
+	}
+
+	if (req.body.COMMAND === "RECEIVE_CHIPS") {
+		startingChipCount += parseInt(req.body.DATA)
+		console.log("Reveived chips: " + req.body.DATA + " New count:" + startingChipCount)
+	}
 
 	res.sendStatus(200);
 });
 
 app.get('/move', function(req, res) {
 
-	res.send('BET');
+	if (shouldBet) {
+		console.log("Betting");
+		res.send("BET");
+	} else if (shouldBetAllIn) {
+		res.send("BET:" + startingChipCount)
+	} else {
+		console.log("Folding");
+		res.send("FOLD");
+	}
+	
 })
 
 var server = app.listen(3000, function () {
