@@ -7,6 +7,8 @@ var myCard;
 var startingChipCount;
 var handLimit;
 
+var opponentMove;
+var opponentCard;
 var cardDictionary = {
   "2": "FOLD",
   "3": "FOLD",
@@ -20,6 +22,7 @@ var cardDictionary = {
   "J": "BET",
   "Q": "BET"
 };
+
 
 app.use(bodyParser.urlencoded({
   extended: false
@@ -36,8 +39,6 @@ app.post('/start', function(req, res) {
 });
 
 app.post('/update', function(req, res) {
-  var opponentMove;
-  var opponentCard;
 
   if (req.body.COMMAND === "CARD") {
     myCard = req.body.DATA;
@@ -75,7 +76,7 @@ app.post('/update', function(req, res) {
 
 app.get('/move', function(req, res) {
 
-  if (startingChipCount <= 5) {
+  if (opponentMove <= "CALL") {
 
     console.log("Running Low. Calling");
     return res.send("CALL");
