@@ -289,6 +289,30 @@ describe('playing botillaterooms poker game', function() {
       });
     });
   });
+
+  it('should fold if the opponent bets and we have a shit hand', function(done) {
+    var botillaterooms = request(app);
+
+    botillaterooms.post('/update')
+    .type('application/x-www-form-urlencoded')
+    .send({
+      'COMMAND': 'CARD',
+      'DATA': '7'
+    })
+    .end(function() {
+      botillaterooms.post('/update')
+      .type('application/x-www-form-urlencoded')
+      .send({
+        'COMMAND': 'OPPONENT_MOVE',
+        'DATA': 'BET'
+      })
+      .end(function() {
+        botillaterooms.get('/move')
+        .expect(200)
+        .expect('FOLD', done);
+      });
+    });
+  });
 });
 
 describe('playing botillaterooms with different bets (i.e. no money)', function() {

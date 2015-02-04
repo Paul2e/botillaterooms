@@ -99,6 +99,8 @@ app.post('/update', function(req, res) {
     opponents.push(opponent);
 
     logger.info("Last opponent status: ", opponent);
+    opponentMove = null;
+    opponentCard = null;
   }
 
   res.sendStatus(200);
@@ -107,10 +109,13 @@ app.post('/update', function(req, res) {
 app.get('/move', function(req, res) {
 
   var move = cardDictionary[myCard];
-  var goodHand = /BET/.test(move);
+  var goodHand = /BET/.test(move) || /ALL-IN/.test(move);
+  var opponentHasGoodMove = /BET/.test(opponentMove);
 
   if (opponentMove === "CALL" && !goodHand) {
     move = "CALL";
+  } else if (opponentHasGoodMove && !goodHand) {
+    move = "FOLD";
   } else {
     switch (true) {
       case /Small/.test(move):
