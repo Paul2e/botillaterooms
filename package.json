@@ -1,0 +1,31 @@
+{
+  "name": "botillaterooms",
+  "version": "0.0.1",
+  "description": "botillaterooms. The naughtyiest bot on the planet.",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "body-parser": "^1.11.0",
+    "express": "^4.11.2",
+    "nock": "^0.59.1",
+    "supertest": "^0.15.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.1.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Paul2e/botillaterooms.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Paul2e/botillaterooms/issues"
+  },
+  "homepage": "https://github.com/Paul2e/botillaterooms"
+}
