@@ -78,7 +78,7 @@ describe('playing botillaterooms poker game', function() {
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('FOLD', done);
+      .expect('CALL', done);
     });
   });
 
@@ -206,7 +206,7 @@ describe('playing botillaterooms poker game', function() {
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('FOLD', done);
+      .expect('CALL', done);
     });
   });
 
@@ -222,7 +222,7 @@ describe('playing botillaterooms poker game', function() {
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('FOLD', done);
+      .expect('CALL', done);
     });
   });
 
@@ -238,7 +238,7 @@ describe('playing botillaterooms poker game', function() {
     .end(function() {
       botillaterooms.get('/move')
       .expect(200)
-      .expect('FOLD', done);
+      .expect('CALL', done);
     });
   });
 
