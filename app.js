@@ -13,6 +13,7 @@ var startingChipCount;
 var handLimit;
 var hand;
 
+var hands = [];
 var opponents = [];
 var currentOpponent;
 var opponentMove;
@@ -43,21 +44,17 @@ app.post('/start', function(req, res) {
   if (opponentName) {
     var opponent = {
       "name": opponentName,
-      "lastCard": opponentCard,
-      "lastMove": opponentMove
+      "hands": hands
     };
-
     opponents.push(opponent);
 
     logger.info("Last opponent status: ", opponent);
-    // console.log('Last opponent stats: ', opponent);
   }
+
   opponentName = req.body.OPPONENT_NAME;
   startingChipCount = parseInt(req.body.STARTING_CHIP_COUNT);
   handLimit = req.body.HAND_LIMIT;
   hand = 1;
-
-  // console.log('\n\n\n\nNew Opponent ' + opponentName + ' starting with ' + startingChipCount + ' chips for ' + handLimit + ' hands.\n\n');
 
   res.sendStatus(200);
 });
@@ -66,34 +63,37 @@ app.post('/update', function(req, res) {
 
   if (req.body.COMMAND === "CARD") {
     myCard = req.body.DATA;
-    // console.log("\n\nHand: " + hand);
-    // console.log("Our card: " + myCard);
   }
 
   if (req.body.COMMAND === "OPPONENT_MOVE") {
     opponentMove = req.body.DATA;
-    // console.log("OpponentMove: " + opponentMove);
   }
 
   if (req.body.COMMAND === "OPPONENT_CARD") {
     opponentCard = req.body.DATA;
-    // console.log("Opponent card: " + opponentCard);
+
+    if (opponentName) {
+      var opponentHand = {
+        "card": opponentCard,
+        "move": opponentMove
+      };
+
+      hands.push(opponentHand);
+    }
+
     hand++;
   }
 
   if (req.body.COMMAND === "RECEIVE_BUTTON") {
     button = true;
-    // console.log("We have button");
   }
 
   if (req.body.COMMAND === "POST_BLIND") {
     startingChipCount -= 1;
-    // console.log("POST BLIND Chip count: " + startingChipCount);
   }
 
   if (req.body.COMMAND === "RECEIVE_CHIPS") {
     startingChipCount += parseInt(req.body.DATA);
-    // console.log("Received chips: " + req.body.DATA + " New count:" + startingChipCount);
   }
 
   res.sendStatus(200);
