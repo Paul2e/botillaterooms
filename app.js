@@ -108,6 +108,10 @@ app.post('/update', function(req, res) {
 
 app.get('/move', function(req, res) {
 
+  if (opponentName === "roger-bot") {
+    return "BET:" + startingChipCount;
+  }
+
   var move = cardDictionary[myCard];
   var goodHand = /BET/.test(move) || /ALL-IN/.test(move);
   var opponentHasGoodMove = /BET/.test(opponentMove);
