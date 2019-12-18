@@ -51,8 +51,7 @@ app.post('/start', function(req, res) {
 
   log.info('Game Start - Opponent: ', opponentName, 
             ' Starting Chip Count: ', startingChipCount,
-            ' Hand Limit: ', handLimit,
-            ' Hand ', hand);
+            ' Hand Limit: ', handLimit);
 
 });
 
