@@ -162,8 +162,8 @@ app.get('/move', function(req, res) {
   log.info('Hand: ', hand, 
             ' Card: ', myCard,
             ' Move: ', move, 
-            ' Did I have a Good Hand: ', goodHand,
-            ' Did my Opponent have a Good Move: ', opponentHasGoodMove);
+            ' Did I have a Good Hand?: ', goodHand,
+            ' Did my Opponent have a Good Move?: ', opponentHasGoodMove);
 
   ourMove = move;
   res.send(move);
