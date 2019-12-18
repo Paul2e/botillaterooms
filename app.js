@@ -8,20 +8,18 @@ const SimpleNodeLogger = require('simple-node-logger'),
     },
 log = SimpleNodeLogger.createSimpleLogger( opts );
 
-var opponentName;
 var myCard;
 var startingChipCount;
 var handLimit;
 var hand;
 var button;
+var opponentName;
 
 var hands = [];
 var opponents = [];
-var currentOpponent;
-var ourMove;
+var myMove;
 var opponentMove;
 var opponentCard;
-var lastMove;
 var cardDictionary = {
   "2": "FOLD",
   "3": "FOLD",
@@ -73,9 +71,9 @@ app.post('/update', function(req, res) {
 
     if (opponentName) {
       var opponentHand = {
-        "ourCard": myCard,
+        "myCard": myCard,
         "opponentCard": opponentCard,
-        "ourMove": ourMove,
+        "myMove": myMove,
         "opponentMove": opponentMove
       };
 
@@ -85,7 +83,7 @@ app.post('/update', function(req, res) {
     log.info('Hand: ', hand, 
     ' My Card: ', myCard,
     ' Opponent Card: ', opponentCard,
-    ' My Move ', ourMove,
+    ' My Move ', myMove,
     ' Opponent Move ', opponentMove);
 
     hand++;
@@ -165,7 +163,7 @@ app.get('/move', function(req, res) {
             ' Did I have a Good Hand?: ', goodHand,
             ' Did my Opponent have a Good Move?: ', opponentHasGoodMove);
 
-  ourMove = move;
+  myMove = move;
   res.send(move);
 });
 
