@@ -1,7 +1,7 @@
 {
   "name": "botillaterooms",
   "version": "0.0.1",
-  "description": "botillaterooms. The naughtyiest bot on the planet.",
+  "description": "botillaterooms. The naughtiest bot on the planet.",
   "main": "app.js",
   "directories": {
     "test": "test"
