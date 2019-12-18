@@ -1,11 +1,12 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var log4js = require('log4js');
-log4js.loadAppender('file');
-log4js.addAppender(log4js.appenders.file('logs/opponents.log'), 'opponents');
-var logger = log4js.getLogger('opponents');
-logger.setLevel('INFO');
+const SimpleNodeLogger = require('simple-node-logger'),
+    opts = {
+        logFilePath:'poker.log',
+        timestampFormat:'YYYY-MM-DD HH:mm:ss.SSS'
+    },
+log = SimpleNodeLogger.createSimpleLogger( opts );
 
 var opponentName;
 var myCard;
@@ -49,6 +50,12 @@ app.post('/start', function(req, res) {
   hand = 1;
 
   res.sendStatus(200);
+
+  log.info('Game Start - Opponent: ', opponentName, 
+            ' Starting Chip Count: ', startingChipCount,
+            ' Hand Limit: ', handLimit,
+            ' Hand ', hand);
+
 });
 
 app.post('/update', function(req, res) {
@@ -75,19 +82,32 @@ app.post('/update', function(req, res) {
       hands.push(opponentHand);
     }
 
+    log.info('Hand: ', hand, 
+    ' My Card: ', myCard,
+    ' Opponent Card: ', opponentCard,
+    ' My Move ', ourMove,
+    ' Opponent Move ', opponentMove);
+
     hand++;
   }
 
   if (req.body.COMMAND === "RECEIVE_BUTTON") {
     button = true;
+
+    log.info('Hand: ', hand, ' I have the Button');
   }
 
   if (req.body.COMMAND === "POST_BLIND") {
     startingChipCount -= 1;
+
+    log.info('Hand: ', hand, ' Posted the Blind');
   }
 
   if (req.body.COMMAND === "RECEIVE_CHIPS") {
+    recievedChips = parseInt(req.body.DATA);
     startingChipCount += parseInt(req.body.DATA);
+
+    log.info('Hand: ', hand, ' I have recieved Chips: ', recievedChips, ' Total Chip Count: ', startingChipCount);
   }
 
   if (req.body.COMMAND === "GAME_OVER") {
@@ -97,7 +117,9 @@ app.post('/update', function(req, res) {
     };
     opponents.push(opponent);
 
-    logger.info("Last opponent status: ", opponent);
+    log.info('Hand: ', hand, ' Game Over: Opponent Name: ', opponentName, 
+              ' Number of Hands: ', hands,
+              ' Total Chip Count: ', startingChipCount);
     opponentMove = null;
     opponentCard = null;
     button = false;
@@ -136,6 +158,12 @@ app.get('/move', function(req, res) {
         break;
     }
   }
+
+  log.info('Hand: ', hand, 
+            ' Card: ', myCard,
+            ' Move: ', move, 
+            ' Did I have a Good Hand: ', goodHand,
+            ' Did my Opponent have a Good Move: ', opponentHasGoodMove);
 
   ourMove = move;
   res.send(move);

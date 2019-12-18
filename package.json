@@ -10,6 +10,7 @@
     "body-parser": "^1.11.0",
     "express": "^4.11.2",
     "nock": "^0.59.1",
+    "simple-node-logger": "^18.12.23",
     "supertest": "^0.15.0"
   },
   "devDependencies": {
