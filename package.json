@@ -11,7 +11,7 @@
     "express": "^4.11.2",
     "nock": "^0.59.1",
     "simple-node-logger": "^18.12.23",
-    "supertest": "^0.15.0"
+    "supertest": "^6.3.3"
   },
   "devDependencies": {
     "mocha": "^2.1.0"
